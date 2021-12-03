@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components/native';
 import { Dimensions } from 'react-native';
 import {
@@ -13,6 +13,7 @@ import { dark, light } from '../theme';
 import { ChildCautionAction } from '../actions';
 import PregnantCautionButton from '../components/PregnantCautionButton';
 import CombCautionButton from '../components/CombCautionButton';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Container = styled.SafeAreaView`
   justify-content: flex-start;
@@ -39,6 +40,7 @@ const Title = styled.Text`
 
 /// function start
 function Setting() {
+  const [choco, setChoco] = useState();
   const width = Dimensions.get('window').width;
 
   const { setting } = useSelector(state => {
@@ -46,8 +48,6 @@ function Setting() {
       setting: state.settingInfo,
     };
   });
-
-  console.log(setting);
 
   const theme = setting.darkmode ? dark : light;
 

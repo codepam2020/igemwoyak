@@ -7,6 +7,8 @@ import { Picker } from '@react-native-picker/picker';
 import { light, dark } from '../theme';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { AddPreDrugInfo } from '../actions/PreDrugAction';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 const width = Dimensions.get('window').width;
 
 const Container = styled.View`
@@ -123,9 +125,19 @@ function AddDrugSetting({ route, navigation }) {
     data.NightAlarm = nightAlarm;
   }
 
+  const savePreDrugInfo = async data => {
+    try {
+      const choco = JSON.stringify(data);
+      await AsyncStorage.setItem('@predrug_info', choco);
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+
   //push save button
   function PushSaveButton() {
     dispatch(AddPreDrugInfo(data));
+    savePreDrugInfo(data);
     navigation.navigate('MainTab');
   }
 

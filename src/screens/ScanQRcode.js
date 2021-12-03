@@ -52,7 +52,7 @@ function ScanQRcode({ navigation }) {
       var count = parseInt(data.substring(4, 6));
       var PreDrugDays = parseInt(data.substring(10, 12));
 
-      var code = data + '8';
+      var code = data;
 
       for (i = 1; i < count + 1; i++) {
         var barcode = code.substring(13 * i, 13 * (i + 1));

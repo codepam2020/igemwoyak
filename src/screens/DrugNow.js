@@ -4,6 +4,7 @@ import styled from 'styled-components/native';
 import { DrugSearchButton } from '../components';
 import { dark, light } from '../theme';
 import { PreDrugDataContent } from '../components';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Container = styled.SafeAreaView`
   justify-content: flex-start;
@@ -54,6 +55,27 @@ const DrugNow = ({ navigation }) => {
   for (i = 0; i < preDrugInfos.length; i++) {
     CombList.push(preDrugInfos[i].CombTarget);
   }
+
+  const [choco, setChoco] = useState();
+
+  const load = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@predrug_info');
+      const choco = JSON.parse(value);
+
+      if (value != null) {
+        setChoco(choco);
+      }
+    } catch (e) {
+      console.log('hihi');
+    }
+  };
+
+  useEffect(() => {
+    load();
+  }, []);
+
+  console.log(choco.effect);
 
   const theme = setting.darkmode ? dark : light;
 
