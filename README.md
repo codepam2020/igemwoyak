@@ -1,7 +1,5 @@
-[![NPM Version][npm-image]][npm-url]
-<img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/jungsooYook/project_pharm">
-![GitHub top language](https://img.shields.io/github/languages/top/jungsooYook/project_pharm)
-![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/codepam2020/Drug-Information-App)
+<img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/codepam2020/igemwoyak">
+<img alt="GitHub top language" src="https://img.shields.io/github/languages/top/codepam2020/igemwoyak">
 
 # Product Name
 
@@ -14,7 +12,6 @@ And there is a bulletin board for various drugs, so patients can share side effe
 
 이 어플은 약통에 있는 바코드를 인식하여 약의 이름과 약 보관 방법, 약 섭취방법 등 정보를 알려줍니다.
 그리고 여러가지 약에 대한 게시판이 있어 환자들끼리 부작용이나 각종 정보들을 공유할 수 있습니다.
-
 
 ## Installation
 
@@ -63,7 +60,6 @@ Your Name – [@YourTwitter](https://twitter.com/dbader_org) – YourEmail@examp
 Distributed under the XYZ license. See `LICENSE` for more information.
 
 [https://github.com/yourname/github-link](https://github.com/dbader/) -->
-
 
 <!-- 1. Fork it (<https://github.com/yourname/yourproject/fork>)
 2. Create your feature branch (`git checkout -b feature/fooBar`)
