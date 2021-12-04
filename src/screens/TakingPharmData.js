@@ -83,7 +83,7 @@ function TakingPharmData({ navigation }) {
                     (setting.ChildCaution ? drugInfo.ChildAge : false) ||
                     (setting.CombCaution
                       ? CombList.filter(e =>
-                          e ? e.indexOf('6495') !== -1 : false,
+                          e ? e.indexOf(drugInfo.StdCode) !== -1 : false,
                         ).length > 0
                       : false)
                       ? theme.caution

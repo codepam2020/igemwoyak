@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "igemwoyak",
+    "name": "이게뭐약",
     "slug": "igemwoyak",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -17,12 +17,17 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false,
+      "bundleIdentifier": "com.igemwoyak.codepam2020",
+      "buildNumber": "1.0.0"
     },
     "android": {
+      "package": "com.igemwoyak.codepam2020",
+      "versionCode": 1,
+      "permissions": ["CAMERA", "VIBRATE"],
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
+        "backgroundColor": "#292a35"
       }
     },
     "web": {

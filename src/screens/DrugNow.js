@@ -57,7 +57,13 @@ const DrugNow = ({ navigation }) => {
     CombList.push(preDrugInfos[i].CombTarget);
   }
 
+<<<<<<< Updated upstream
   const [preDrugInformation, setPreDrugInformation] = useState({});
+=======
+  console.log(CombList);
+
+  const [choco, setChoco] = useState();
+>>>>>>> Stashed changes
 
   const load = async () => {
     try {
@@ -65,7 +71,12 @@ const DrugNow = ({ navigation }) => {
       const predruginformation = JSON.parse(value);
 
       if (value != null) {
+<<<<<<< Updated upstream
         setPreDrugInformation(predruginformation);
+=======
+        setChoco(choco);
+      } else {
+>>>>>>> Stashed changes
       }
     } catch (e) {
       console.log('hihi');
@@ -80,10 +91,13 @@ const DrugNow = ({ navigation }) => {
     load();
   });
 
+<<<<<<< Updated upstream
   useEffect(() => {
     load();
   }, []);
 
+=======
+>>>>>>> Stashed changes
   const theme = setting.darkmode ? dark : light;
 
   return (
@@ -110,7 +124,7 @@ const DrugNow = ({ navigation }) => {
                     (setting.ChildCaution ? drugInfo.ChildAge : false) ||
                     (setting.CombCaution
                       ? CombList.filter(e =>
-                          e ? e.indexOf('6495') !== -1 : false,
+                          e ? e.indexOf(drugInfo.StdCode) !== -1 : false,
                         ).length > 1
                       : false)
                       ? theme.caution
