@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+import AppLoading from 'expo-app-loading';
 import { Text, Alert, Vibration, Dimensions, StyleSheet } from 'react-native';
 import { ProgressContext } from '../contexts/Progress';
 import styled from 'styled-components/native';

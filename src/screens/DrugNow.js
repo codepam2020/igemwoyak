@@ -5,6 +5,7 @@ import { DrugSearchButton } from '../components';
 import { dark, light } from '../theme';
 import { PreDrugDataContent } from '../components';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { PreDrugInformation } from '../reducers/PreDrugInformation';
 
 const Container = styled.SafeAreaView`
   justify-content: flex-start;
@@ -56,26 +57,36 @@ const DrugNow = ({ navigation }) => {
     CombList.push(preDrugInfos[i].CombTarget);
   }
 
-  const [choco, setChoco] = useState();
+  const [preDrugInformation, setPreDrugInformation] = useState();
 
   const load = async () => {
     try {
-      const value = await AsyncStorage.getItem('@predrug_info');
-      const choco = JSON.parse(value);
+      const value = await AsyncStorage.getItem('@predruginformation');
+      const predruginformation = JSON.parse(value);
 
       if (value != null) {
-        setChoco(choco);
+        setPreDrugInformation(predruginformation);
       }
     } catch (e) {
       console.log('hihi');
     }
+
+    console.log(Object.values(preDrugInformation)[0]);
   };
+
+  useEffect(() => {
+    load();
+  }, [preDrugInfos]);
+
+  // useEffect(() => {
+  //   load();
+  // });
 
   useEffect(() => {
     load();
   }, []);
 
-  console.log(choco.effect);
+  // const data = console.log(Object.values(preDrugInformation));
 
   const theme = setting.darkmode ? dark : light;
 
@@ -85,7 +96,7 @@ const DrugNow = ({ navigation }) => {
         현재 복용중인 약물
       </Title>
       <Content style={{ color: theme.caution, paddingBottom: 10 }}>
-        빨간색으로 표시되는 약물은 복용시 주의가 필요한 약물입니다.
+        빨간색으로 표시되는 약물은 복용시 주의가 필요한 약물입니다
       </Content>
       <List>
         {preDrugInfos &&

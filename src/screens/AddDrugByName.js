@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { ProgressContext } from '../contexts/Progress';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components/native';
 import { Alert, Dimensions, Text } from 'react-native';
 import secret from '../data/secret.json';
@@ -87,6 +87,11 @@ function AddDrugByName({ navigation }) {
     var Now = new Date();
     Now.setHours(Now.getHours() + 9);
     return Now.toISOString().replace('T', ' ').substring(0, 19);
+  }
+
+  // 약물 이름 클릿기 함수
+  function PressDrugName(data) {
+    SeqToBarCode(data.ITEM_SEQ);
   }
 
   // seq코드를 바코드로 변경
@@ -238,11 +243,6 @@ function AddDrugByName({ navigation }) {
     } else {
       return data;
     }
-  }
-
-  // 약물 이름 클릿기 함수
-  function PressDrugName(data) {
-    SeqToBarCode(data.ITEM_SEQ);
   }
 
   // search drug name by call API function

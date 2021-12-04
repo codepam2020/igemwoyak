@@ -1,7 +1,7 @@
-import React from 'react';
-import { Dimensions, Switch, Button, TouchableOpacity } from 'react-native';
+import React, { useEffect } from 'react';
+import { Dimensions, Switch, TouchableOpacity } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import styled, { ThemeConsumer } from 'styled-components/native';
+import styled from 'styled-components/native';
 import { useState } from 'react';
 import { Picker } from '@react-native-picker/picker';
 import { light, dark } from '../theme';
@@ -70,6 +70,26 @@ function AddDrugSetting({ route, navigation }) {
   const theme = darkmode ? dark : light;
   const dispatch = useDispatch();
 
+  const [preDrugInfos, setPreDrugInfos] = useState({});
+
+  // 로컬 데이터 불러오기
+  const loadPreDrugInfo = async () => {
+    const loadedData = await AsyncStorage.getItem('@predruginformation');
+    setPreDrugInfos(JSON.parse(loadedData || '{}'));
+  };
+
+  useEffect(() => {
+    loadPreDrugInfo();
+  }, []);
+
+  const dispatchPreDrugInfo = async data => {
+    try {
+      await AsyncStorage.setItem('@predruginformation', JSON.stringify(data));
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   /// 숫자 리스트 형태
   var num = [];
   for (var i = 1; i < 91; i++) {
@@ -125,19 +145,11 @@ function AddDrugSetting({ route, navigation }) {
     data.NightAlarm = nightAlarm;
   }
 
-  const savePreDrugInfo = async data => {
-    try {
-      const choco = JSON.stringify(data);
-      await AsyncStorage.setItem('@predrug_info', choco);
-    } catch (e) {
-      console.log(e.message);
-    }
-  };
-
   //push save button
   function PushSaveButton() {
     dispatch(AddPreDrugInfo(data));
-    savePreDrugInfo(data);
+    const n_data = { [data.id]: data };
+    dispatchPreDrugInfo({ ...data, ...n_data });
     navigation.navigate('MainTab');
   }
 
