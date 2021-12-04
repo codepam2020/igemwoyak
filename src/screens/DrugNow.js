@@ -57,7 +57,7 @@ const DrugNow = ({ navigation }) => {
     CombList.push(preDrugInfos[i].CombTarget);
   }
 
-  const [preDrugInformation, setPreDrugInformation] = useState();
+  const [preDrugInformation, setPreDrugInformation] = useState({});
 
   const load = async () => {
     try {
@@ -70,23 +70,19 @@ const DrugNow = ({ navigation }) => {
     } catch (e) {
       console.log('hihi');
     }
-
-    console.log(Object.values(preDrugInformation)[0]);
   };
 
   useEffect(() => {
     load();
   }, [preDrugInfos]);
 
-  // useEffect(() => {
-  //   load();
-  // });
+  useEffect(() => {
+    load();
+  });
 
   useEffect(() => {
     load();
   }, []);
-
-  // const data = console.log(Object.values(preDrugInformation));
 
   const theme = setting.darkmode ? dark : light;
 
@@ -99,8 +95,8 @@ const DrugNow = ({ navigation }) => {
         빨간색으로 표시되는 약물은 복용시 주의가 필요한 약물입니다
       </Content>
       <List>
-        {preDrugInfos &&
-          preDrugInfos
+        {Object.values(preDrugInformation) &&
+          Object.values(preDrugInformation)
             .sort((a, b) => parseFloat(b.id) - parseFloat(a.id))
             .map(drugInfo => (
               <PreDrugDataContent

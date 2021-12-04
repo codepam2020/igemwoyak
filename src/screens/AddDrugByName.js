@@ -107,7 +107,7 @@ function AddDrugByName({ navigation }) {
         });
     } catch (e) {
       spinner.stop();
-      console.log(e.message);
+      console.log('seq');
       Alert.alert('다른 약물을 선택해주세요');
     }
   };
