@@ -15,10 +15,9 @@ const Navigation = () => {
   const [settingInfos, setSettingInfos] = useState({});
   // darkmode redux
   const { inProgress } = useContext(ProgressContext);
-  const { bigTextMode, darkmode } = useSelector(state => {
+  const { setting } = useSelector(state => {
     return {
-      bigTextMode: state.settingInfo.bigTextMode,
-      darkmode: state.settingInfo.darkmode,
+      setting: state.settingInfo,
     };
   });
 
@@ -34,7 +33,9 @@ const Navigation = () => {
     }
   };
 
-  loadSettingInfos();
+  useEffect(() => {
+    loadSettingInfos();
+  }, [setting]);
 
   const theme = settingInfos.darkmode ? dark : light;
 

@@ -29,9 +29,12 @@ const List = styled.ScrollView`
   flex: 1;
   padding-left: 20px;
   padding-right: 20px;
+  padding-top: 20px;
 `;
 
 const Title = styled.Text`
+  position: absolute
+  top: -20px;
   font-size: 30px;
   font-family: ${({ theme }) => theme.font_bold}
   padding-bottom: 15px

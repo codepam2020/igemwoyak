@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useSelector } from 'react-redux';
 import {
@@ -14,18 +14,35 @@ import { ThemeConsumer } from 'styled-components/native';
 import { dark, light } from '../theme';
 import { ThemeContext } from 'styled-components';
 import { Spinner } from '../components';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Stack = createStackNavigator();
 
 const DrugStack = () => {
-  const { bigTextMode, darkmode } = useSelector(state => {
+  const [settingInfos, setSettingInfos] = useState({});
+  const { setting } = useSelector(state => {
     return {
-      bigTextMode: state.settingInfo.bigTextMode,
-      darkmode: state.settingInfo.darkmode,
+      setting: state.settingInfo,
     };
   });
 
-  const theme = darkmode ? dark : light;
+  const loadSettingInfos = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@testsettinginfo12321');
+      const settingInfo = JSON.parse(value);
+      if (value != null) {
+        setSettingInfos(settingInfo);
+      }
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+
+  useEffect(() => {
+    loadSettingInfos();
+  }, [setting]);
+
+  const theme = settingInfos.darkmode ? dark : light;
 
   return (
     <Stack.Navigator initialRouteName="MainTab">
@@ -45,7 +62,9 @@ const DrugStack = () => {
           headerTitleAlign: 'center',
           headerTitleStyle: {
             color: theme.title,
-            fontSize: bigTextMode ? 40 : 30,
+            paddingTop: 0,
+            marginTop: 0,
+            fontSize: settingInfos.bigTextMode ? 38 : 28,
             fontFamily: theme.font_bold,
           },
           headerTintColor: theme.text,
@@ -61,10 +80,14 @@ const DrugStack = () => {
         component={PreDrugDetailed}
         options={{
           title: '약물 상세정보',
-          headerTitleAlign: 'center',
           headerTitleStyle: {
+            justifyContent: 'center',
+            position: 'absolute',
+            left: 10,
             color: theme.title,
-            fontSize: bigTextMode ? 40 : 30,
+            paddingTop: 0,
+            marginTop: 0,
+            fontSize: settingInfos.bigTextMode ? 38 : 28,
             fontFamily: theme.font_bold,
           },
           headerTintColor: theme.text,
@@ -80,10 +103,11 @@ const DrugStack = () => {
         component={DrugSearchByName}
         options={{
           title: '약물명으로 찾기',
-          headerTitleAlign: 'center',
           headerTitleStyle: {
             color: theme.title,
-            fontSize: bigTextMode ? 38 : 28,
+            paddingTop: 0,
+            marginTop: 0,
+            fontSize: settingInfos.bigTextMode ? 38 : 28,
             fontFamily: theme.font_bold,
           },
           headerTintColor: theme.text,
@@ -98,10 +122,11 @@ const DrugStack = () => {
         component={AddDrugByName}
         options={{
           title: '직접 추가하기',
-          headerTitleAlign: 'center',
           headerTitleStyle: {
             color: theme.title,
-            fontSize: bigTextMode ? 38 : 28,
+            paddingTop: 0,
+            marginTop: 0,
+            fontSize: settingInfos.bigTextMode ? 38 : 28,
             fontFamily: theme.font_bold,
           },
           headerTintColor: theme.text,
@@ -120,7 +145,7 @@ const DrugStack = () => {
           headerTitleAlign: 'center',
           headerTitleStyle: {
             color: theme.title,
-            fontSize: bigTextMode ? 38 : 28,
+            fontSize: settingInfos.bigTextMode ? 38 : 28,
             fontFamily: theme.font_bold,
           },
           headerTintColor: theme.text,
@@ -139,7 +164,7 @@ const DrugStack = () => {
           headerTitleAlign: 'center',
           headerTitleStyle: {
             color: theme.title,
-            fontSize: bigTextMode ? 38 : 28,
+            fontSize: settingInfos.bigTextMode ? 38 : 28,
             fontFamily: theme.font_bold,
           },
           headerTintColor: theme.text,
