@@ -74,7 +74,7 @@ function AddDrugSetting({ route, navigation }) {
 
   // 로컬 데이터 불러오기
   const loadPreDrugInfo = async () => {
-    const loadedData = await AsyncStorage.getItem('@predruginformation');
+    const loadedData = await AsyncStorage.getItem('@test12321');
     setPreDrugInfos(JSON.parse(loadedData || '{}'));
   };
 
@@ -84,7 +84,7 @@ function AddDrugSetting({ route, navigation }) {
 
   const dispatchPreDrugInfo = async data => {
     try {
-      await AsyncStorage.setItem('@predruginformation', JSON.stringify(data));
+      await AsyncStorage.setItem('@test12321', JSON.stringify(data));
     } catch (e) {
       console.log(e);
     }
@@ -149,7 +149,7 @@ function AddDrugSetting({ route, navigation }) {
   function PushSaveButton() {
     dispatch(AddPreDrugInfo(data));
     const n_data = { [data.id]: data };
-    dispatchPreDrugInfo({ ...data, ...n_data });
+    dispatchPreDrugInfo({ ...preDrugInfos, ...n_data });
     navigation.navigate('MainTab');
   }
 

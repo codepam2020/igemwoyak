@@ -61,7 +61,7 @@ const DrugNow = ({ navigation }) => {
 
   const load = async () => {
     try {
-      const value = await AsyncStorage.getItem('@predruginformation');
+      const value = await AsyncStorage.getItem('@test12321');
       const predruginformation = JSON.parse(value);
 
       if (value != null) {
@@ -72,17 +72,17 @@ const DrugNow = ({ navigation }) => {
     }
   };
 
+  const dispatchPreDrugInfo = async data => {
+    try {
+      await AsyncStorage.setItem('@test12321', JSON.stringify(data));
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   useEffect(() => {
     load();
   }, [preDrugInfos]);
-
-  useEffect(() => {
-    load();
-  });
-
-  useEffect(() => {
-    load();
-  }, []);
 
   const theme = setting.darkmode ? dark : light;
 

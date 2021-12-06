@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Dimensions, Alert, Vibration } from 'react-native';
 import { RemoveDrugInfo, RemovePreDrugInfo } from '../actions';
 import styled from 'styled-components/native';
@@ -6,6 +6,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { DateConvert } from '../utils';
 import * as Speech from 'expo-speech';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const width = Dimensions.get('window').width;
 
@@ -66,7 +67,9 @@ const TimeContainer = styled.View`
   justify-content: center;
 `;
 
-const PreDrugDataContent = ({ drugInfo, namePress, style }) => {
+const PreDrugDataContent = ({ drugInfo, namePress, style, removeOnPress }) => {
+  const [preDrugInformation, setPreDrugInformation] = useState({});
+
   const dispatch = useDispatch();
   const { id, name } = drugInfo;
   const { year, month, week, date, time } = DateConvert(drugInfo.time);
@@ -105,6 +108,31 @@ const PreDrugDataContent = ({ drugInfo, namePress, style }) => {
     }
   }
 
+  const load = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@test12321');
+      const predruginformation = JSON.parse(value);
+
+      if (value != null) {
+        setPreDrugInformation(predruginformation);
+      }
+    } catch (e) {
+      console.log('hihi');
+    }
+  };
+
+  const dispatchPreDrugInfo = async data => {
+    try {
+      await AsyncStorage.setItem('@test12321', JSON.stringify(data));
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  useEffect(() => {
+    load();
+  }, []);
+
   // remove press function
   function removePress() {
     console.log('Press remove button');
@@ -119,7 +147,10 @@ const PreDrugDataContent = ({ drugInfo, namePress, style }) => {
         {
           text: '네',
           onPress: () => {
-            dispatch(RemovePreDrugInfo(id));
+            const currentDrugInfos = Object.assign({}, preDrugInformation);
+            delete currentDrugInfos[drugInfo.id];
+            dispatchPreDrugInfo(currentDrugInfos);
+            console.log(currentDrugInfos);
           },
         },
       ],
