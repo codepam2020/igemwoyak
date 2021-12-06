@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Alert } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components/native';
 import { DrugSearchButton } from '../components';
@@ -44,6 +45,10 @@ const Content = styled.Text`
 `;
 
 const DrugNow = ({ navigation }) => {
+  const [preDrugInformation, setPreDrugInformation] = useState({});
+  const [settingInfos, setSettingInfos] = useState({});
+  const [variation, setVariation] = useState(1);
+
   const { preDrugInfos, setting } = useSelector(state => {
     return {
       preDrugInfos: state.preDrugInfo,
@@ -51,13 +56,17 @@ const DrugNow = ({ navigation }) => {
     };
   });
 
-  var CombList = [];
-
-  for (i = 0; i < preDrugInfos.length; i++) {
-    CombList.push(preDrugInfos[i].CombTarget);
-  }
-
-  const [preDrugInformation, setPreDrugInformation] = useState({});
+  const loadSettingInfos = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@testsettinginfo12321');
+      const settingInfo = JSON.parse(value);
+      if (value != null) {
+        setSettingInfos(settingInfo);
+      }
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
 
   const load = async () => {
     try {
@@ -68,9 +77,15 @@ const DrugNow = ({ navigation }) => {
         setPreDrugInformation(predruginformation);
       }
     } catch (e) {
-      console.log('hihi');
+      console.log(e.message);
     }
   };
+
+  var CombList = [];
+
+  for (i = 0; i < preDrugInfos.length; i++) {
+    CombList.push(preDrugInfos[i].CombTarget);
+  }
 
   const dispatchPreDrugInfo = async data => {
     try {
@@ -82,9 +97,33 @@ const DrugNow = ({ navigation }) => {
 
   useEffect(() => {
     load();
-  }, [preDrugInfos]);
+    loadSettingInfos();
+  }, [preDrugInfos, variation, setting]);
 
-  const theme = setting.darkmode ? dark : light;
+  function _removePress(id) {
+    console.log('Press remove button');
+    Alert.alert(
+      '정말 삭제하시겠습니까?',
+      '삭제시 복구 불가능하니 신중히 선택바랍니다.',
+      [
+        {
+          text: '아니요',
+          onPress: () => {},
+        },
+        {
+          text: '네',
+          onPress: () => {
+            const currentDrugInfos = Object.assign({}, preDrugInformation);
+            delete currentDrugInfos[id];
+            dispatchPreDrugInfo(currentDrugInfos);
+            setVariation(prev => prev + 1);
+          },
+        },
+      ],
+    );
+  }
+
+  const theme = settingInfos.darkmode ? dark : light;
 
   return (
     <Container>
@@ -114,13 +153,16 @@ const DrugNow = ({ navigation }) => {
                         ).length > 1
                       : false)
                       ? theme.caution
-                      : setting.darkmode
+                      : settingInfos.darkmode
                       ? 'gray'
                       : 'lightgray',
                 }}
                 key={drugInfo.id}
                 drugInfo={drugInfo}
                 navigation={navigation}
+                removePress={() => {
+                  _removePress(drugInfo.id);
+                }}
                 namePress={() =>
                   navigation.navigate('PreDrugDetailed', {
                     drugInfo,

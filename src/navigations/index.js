@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { ThemeProvider } from 'styled-components/native';
 import { dark, light } from '../theme';
@@ -9,8 +9,10 @@ import { NavigationContainer } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import { ProgressContext } from '../contexts/Progress';
 import { Spinner } from '../components';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Navigation = () => {
+  const [settingInfos, setSettingInfos] = useState({});
   // darkmode redux
   const { inProgress } = useContext(ProgressContext);
   const { bigTextMode, darkmode } = useSelector(state => {
@@ -20,13 +22,27 @@ const Navigation = () => {
     };
   });
 
-  const theme = darkmode ? dark : light;
+  const loadSettingInfos = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@testsettinginfo12321');
+      const settingInfo = JSON.parse(value);
+      if (value != null) {
+        setSettingInfos(settingInfo);
+      }
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+
+  loadSettingInfos();
+
+  const theme = settingInfos.darkmode ? dark : light;
 
   return (
-    <ThemeProvider theme={theme} bigTextMode={bigTextMode}>
+    <ThemeProvider theme={theme}>
       <StatusBar
         backgroundColor={theme.background}
-        barStyle={darkmode ? 'light-content' : 'dark-content'}
+        barStyle={settingInfos.darkmode ? 'light-content' : 'dark-content'}
       />
 
       <NavigationContainer>

@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { ScanQRcode, TakingPharmData, Setting, DrugNow } from '../screens';
 import { MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons';
-
 import { dark, light } from '../theme';
 import { useSelector } from 'react-redux';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Tab = createBottomTabNavigator();
 
@@ -17,12 +17,30 @@ function TabIcon_Awesome5({ name, size, color }) {
 }
 
 function MainTab({ navigation }) {
+  const [settingInfos, setSettingInfos] = useState({});
+
   // darkmode redux
   const darkmode = useSelector(state => {
     return state.settingInfo.darkmode;
   });
 
-  const theme = darkmode ? dark : light;
+  const loadSettingInfos = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@testsettinginfo12321');
+      const settingInfo = JSON.parse(value);
+      if (value != null) {
+        setSettingInfos(settingInfo);
+      }
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+
+  useEffect(() => {
+    loadSettingInfos();
+  }, [darkmode]);
+
+  const theme = settingInfos.darkmode ? dark : light;
 
   // rendering start
 

@@ -31,7 +31,6 @@ function ScanVibrationButton({ content, style }) {
 
   function toggleSwitch() {
     dispatch(ScanVibrationAction());
-    console.log(`darkmoe: ${darkmode}`);
   }
 
   // darkmode redux

@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components/native';
 import { Switch } from 'react-native';
 import { DarkModeAction } from '../actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { dark, light } from '../theme';
 import { BigTextModeAction } from '../actions';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Container = styled.View`
   flex-direction: row;
@@ -27,12 +28,9 @@ const Content = styled.Text`
 `;
 
 /// function start
-function ScanVibrationButton({ content, style }) {
+function BigTextModeButton({ content, style }) {
+  const [settingInfos, setSettingInfos] = useState({});
   const dispatch = useDispatch();
-
-  function toggleSwitch() {
-    dispatch(BigTextModeAction());
-  }
 
   // darkmode redux
   const { bigTextMode, darkmode } = useSelector(state => {
@@ -42,12 +40,38 @@ function ScanVibrationButton({ content, style }) {
     };
   });
 
+  const dispatchSettingInfos = async data => {
+    try {
+      await AsyncStorage.setItem('@testsettinginfo12321', JSON.stringify(data));
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const loadSettingInfos = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@testsettinginfo12321');
+      const settingInfo = JSON.parse(value);
+      if (value != null) {
+        setSettingInfos(settingInfo);
+      }
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+
+  useEffect(() => {
+    loadSettingInfos();
+  }, [darkmode]);
+
   const theme = darkmode ? dark : light;
 
   ///rendering start
   return (
     <Container style={style}>
-      <Content style={{ fontSize: bigTextMode ? 40 : 20 }}>{content}</Content>
+      <Content style={{ fontSize: settingInfos.bigTextMode ? 40 : 20 }}>
+        {content}
+      </Content>
       <SwitchContainer>
         <Switch
           trackColor={{
@@ -56,8 +80,13 @@ function ScanVibrationButton({ content, style }) {
           }}
           thumbColor={theme.toggle}
           ios_backgroundColor="#3e3e3e"
-          onValueChange={toggleSwitch}
-          value={bigTextMode}
+          onValueChange={() => {
+            const new_setting = { bigTextMode: !settingInfos.bigTextMode };
+            dispatchSettingInfos({ ...settingInfos, ...new_setting });
+            dispatch(BigTextModeAction());
+            loadSettingInfos();
+          }}
+          value={settingInfos.bigTextMode}
           style={{
             marginLeft: 4,
             alignItems: 'center',
@@ -68,8 +97,8 @@ function ScanVibrationButton({ content, style }) {
   );
 }
 
-export default ScanVibrationButton;
+export default BigTextModeButton;
 
-ScanVibrationButton.defaultprops = {
+BigTextModeButton.defaultprops = {
   isEnabled: false,
 };

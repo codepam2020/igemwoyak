@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/native';
 import { Dimensions } from 'react-native';
 import {
@@ -40,7 +40,7 @@ const Title = styled.Text`
 
 /// function start
 function Setting() {
-  const [choco, setChoco] = useState();
+  const [settingInfos, setSettingInfos] = useState({});
   const width = Dimensions.get('window').width;
 
   const { setting } = useSelector(state => {
@@ -49,11 +49,29 @@ function Setting() {
     };
   });
 
+  const loadSettingInfos = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@testsettinginfo12321');
+      const settingInfo = JSON.parse(value);
+      if (value != null) {
+        setSettingInfos(settingInfo);
+      }
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+
+  useEffect(() => {
+    loadSettingInfos();
+  }, [setting]);
+
+  console.log(settingInfos);
+
   const theme = setting.darkmode ? dark : light;
 
   return (
     <Container>
-      <Title style={{ fontSize: setting.bigTextMode ? 40 : 30 }}>
+      <Title style={{ fontSize: settingInfos.bigTextMode ? 40 : 30 }}>
         환경설정
       </Title>
       <List width={width - 10}>
@@ -61,8 +79,8 @@ function Setting() {
           style={{ fontFamily: theme.font_medium }}
           content="다크모드 활성화"
         />
-        <ScanVibrationButton content="스캔시 진동 활성화" />
         <BigTextMode content="큰 글씨 모드" />
+        <ScanVibrationButton content="스캔시 진동 활성화" />
         <ChildCautionButton content="어린이 복용 경고 활성화" />
         <ElderCautionButton content="노인 복용 경고 활성화" />
         <PregnantCautionButton content="임부 복용 경고 활성화" />

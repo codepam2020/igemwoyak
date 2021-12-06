@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components/native';
 import { Switch } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { DarkModeAction } from '../actions';
 import { dark, light } from '../theme';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Container = styled.View`
   flex-direction: row;
@@ -27,25 +28,46 @@ const Content = styled.Text`
 
 /// function start
 function DarkModeButton({ content, style }) {
+  const [settingInfos, setSettingInfos] = useState({});
   const dispatch = useDispatch();
+  const theme = settingInfos.darkmode ? dark : light;
 
-  const theme = darkmode ? dark : light;
-
-  function toggleSwitch() {
-    dispatch(DarkModeAction());
-  }
-
-  const { bigTextMode, darkmode } = useSelector(state => {
+  const { setting } = useSelector(state => {
     return {
-      bigTextMode: state.settingInfo.bigTextMode,
-      darkmode: state.settingInfo.darkmode,
+      setting: state.settingInfo,
     };
   });
+
+  const dispatchSettingInfos = async data => {
+    try {
+      await AsyncStorage.setItem('@testsettinginfo12321', JSON.stringify(data));
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const loadSettingInfos = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@testsettinginfo12321');
+      const settingInfo = JSON.parse(value);
+      if (value != null) {
+        setSettingInfos(settingInfo);
+      }
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+
+  useEffect(() => {
+    loadSettingInfos();
+  }, [setting]);
 
   ///rendering start
   return (
     <Container style={style}>
-      <Content style={{ fontSize: bigTextMode ? 40 : 20 }}>{content}</Content>
+      <Content style={{ fontSize: settingInfos.bigTextMode ? 40 : 20 }}>
+        {content}
+      </Content>
       <SwitchContainer>
         <Switch
           trackColor={{
@@ -54,8 +76,13 @@ function DarkModeButton({ content, style }) {
           }}
           thumbColor={theme.toggle}
           ios_backgroundColor="#3e3e3e"
-          onValueChange={toggleSwitch}
-          value={darkmode}
+          onValueChange={() => {
+            const new_setting = { darkmode: !settingInfos.darkmode };
+            dispatchSettingInfos({ ...settingInfos, ...new_setting });
+            dispatch(DarkModeAction());
+            loadSettingInfos();
+          }}
+          value={settingInfos.darkmode}
           style={{
             marginLeft: 4,
             alignItems: 'center',

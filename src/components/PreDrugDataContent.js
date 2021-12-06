@@ -43,7 +43,7 @@ const IconContainer = styled.TouchableOpacity`
 `;
 
 const Content = styled.Text`
-  flex:0.9
+  flex:0.9;
   align-items: flex-start
   font-size: 20px;
   font-family: ${({ theme }) => theme.font_medium}
@@ -67,29 +67,44 @@ const TimeContainer = styled.View`
   justify-content: center;
 `;
 
-const PreDrugDataContent = ({ drugInfo, namePress, style, removeOnPress }) => {
+const PreDrugDataContent = ({ drugInfo, namePress, style, removePress }) => {
   const [preDrugInformation, setPreDrugInformation] = useState({});
-
+  const [settingInfos, setSettingInfos] = useState({});
   const dispatch = useDispatch();
   const { id, name } = drugInfo;
   const { year, month, week, date, time } = DateConvert(drugInfo.time);
-  const { bigTextMode, darkmode } = useSelector(state => {
+  const { setting } = useSelector(state => {
     return {
-      bigTextMode: state.settingInfo.bigTextMode,
-      darkmode: state.settingInfo.darkmode,
+      setting: state.settingInfo,
     };
   });
 
+  const loadSettingInfos = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@testsettinginfo12321');
+      const settingInfo = JSON.parse(value);
+      if (value != null) {
+        setSettingInfos(settingInfo);
+      }
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+
+  useEffect(() => {
+    loadSettingInfos();
+  }, [setting]);
+
   function PharmNameset(data) {
     if (width < 600) {
-      if (bigTextMode == true) {
+      if (settingInfos.bigTextMode == true) {
         if (data.length >= 5) {
           return `${data.substring(0, 5)}..`;
         } else {
           return data;
         }
       } else {
-        if (bigTextMode == true) {
+        if (settingInfos.bigTextMode == true) {
           if (data.length >= 10) {
             return `${data.substring(0, 10)}..`;
           } else {
@@ -108,55 +123,6 @@ const PreDrugDataContent = ({ drugInfo, namePress, style, removeOnPress }) => {
     }
   }
 
-  const load = async () => {
-    try {
-      const value = await AsyncStorage.getItem('@test12321');
-      const predruginformation = JSON.parse(value);
-
-      if (value != null) {
-        setPreDrugInformation(predruginformation);
-      }
-    } catch (e) {
-      console.log('hihi');
-    }
-  };
-
-  const dispatchPreDrugInfo = async data => {
-    try {
-      await AsyncStorage.setItem('@test12321', JSON.stringify(data));
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  useEffect(() => {
-    load();
-  }, []);
-
-  // remove press function
-  function removePress() {
-    console.log('Press remove button');
-    Alert.alert(
-      '정말 삭제하시겠습니까?',
-      '삭제시 복구 불가능하니 신중히 선택바랍니다.',
-      [
-        {
-          text: '아니요',
-          onPress: () => {},
-        },
-        {
-          text: '네',
-          onPress: () => {
-            const currentDrugInfos = Object.assign({}, preDrugInformation);
-            delete currentDrugInfos[drugInfo.id];
-            dispatchPreDrugInfo(currentDrugInfos);
-            console.log(currentDrugInfos);
-          },
-        },
-      ],
-    );
-  }
-
   // long press function
   function longPress() {
     Vibration.vibrate(20);
@@ -170,14 +136,20 @@ const PreDrugDataContent = ({ drugInfo, namePress, style, removeOnPress }) => {
         onLongPress={longPress}
         delayLongPress={300}
       >
-        <Content style={{ fontSize: bigTextMode ? 33 : 18 }}>
+        <Content
+          style={{
+            fontSize: settingInfos.bigTextMode ? 33 : 18,
+          }}
+        >
           {PharmNameset(name)}
         </Content>
         <TimeContainer>
           <Time
-            style={{ fontSize: bigTextMode ? 25 : 15 }}
+            style={{ fontSize: settingInfos.bigTextMode ? 25 : 15 }}
           >{`${month}월 ${date}일 (${week})`}</Time>
-          <Time style={{ fontSize: bigTextMode ? 25 : 15 }}>{`${time}`}</Time>
+          <Time
+            style={{ fontSize: settingInfos.bigTextMode ? 25 : 15 }}
+          >{`${time}`}</Time>
         </TimeContainer>
       </NmaeContainer>
       <IconContainer onPress={removePress}>
