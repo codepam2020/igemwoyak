@@ -6,7 +6,7 @@ import { DrugSearchButton } from '../components';
 import { dark, light } from '../theme';
 import { PreDrugDataContent } from '../components';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { RemoveDrugInfo, RemovePreDrugInfo } from '../actions';
+import { RemovePreDrugInfo } from '../actions';
 
 const Container = styled.SafeAreaView`
   justify-content: flex-start;
@@ -41,8 +41,6 @@ const Content = styled.Text`
   color: white;
   padding: 7px 0;
   padding-bottom: 30px;
-  padding-top: 0
-  margin-top:80px
 `;
 
 const DrugNow = ({ navigation }) => {

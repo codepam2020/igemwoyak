@@ -149,7 +149,7 @@ function TakingPharmData({ navigation }) {
         복약 내역
       </Title>
       <Content style={{ color: theme.caution, paddingBottom: 10 }}>
-        빨간색으로 표시되는 약물은 복용시 주의가 필요한 약물입니다.
+        빨간색으로 표시되는 약물은 복용시 주의가 필요한 약물입니다
       </Content>
       <List>
         {Object.values(drugInformation) &&
@@ -168,7 +168,7 @@ function TakingPharmData({ navigation }) {
                     (settingInfos.CombCaution
                       ? CombList.filter(e =>
                           e ? e.indexOf(drugInfo.StdCode) !== -1 : false,
-                        ).length > 0
+                        ).length > 1
                       : false)
                       ? theme.caution
                       : settingInfos.darkmode
