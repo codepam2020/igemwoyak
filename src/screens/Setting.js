@@ -29,7 +29,7 @@ const List = styled.ScrollView`
   flex: 1;
   padding-left: 20px;
   padding-right: 20px;
-  padding-top: 20px;
+  margin-top: 50px;
 `;
 
 const Title = styled.Text`
@@ -66,9 +66,8 @@ function Setting() {
 
   useEffect(() => {
     loadSettingInfos();
+    console.log(settingInfos);
   }, [setting]);
-
-  console.log(settingInfos);
 
   const theme = setting.darkmode ? dark : light;
 

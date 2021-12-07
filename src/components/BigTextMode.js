@@ -33,10 +33,9 @@ function BigTextModeButton({ content, style }) {
   const dispatch = useDispatch();
 
   // darkmode redux
-  const { bigTextMode, darkmode } = useSelector(state => {
+  const { setting } = useSelector(state => {
     return {
-      bigTextMode: state.settingInfo.bigTextMode,
-      darkmode: state.settingInfo.darkmode,
+      setting: state.settingInfo,
     };
   });
 
@@ -62,14 +61,14 @@ function BigTextModeButton({ content, style }) {
 
   useEffect(() => {
     loadSettingInfos();
-  }, [darkmode]);
+  }, [setting]);
 
-  const theme = darkmode ? dark : light;
+  const theme = settingInfos.darkmode ? dark : light;
 
   ///rendering start
   return (
     <Container style={style}>
-      <Content style={{ fontSize: settingInfos.bigTextMode ? 40 : 20 }}>
+      <Content style={{ fontSize: settingInfos.bigTextMode ? 33 : 18 }}>
         {content}
       </Content>
       <SwitchContainer>

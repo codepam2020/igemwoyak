@@ -6,7 +6,6 @@ import { DrugSearchButton } from '../components';
 import { dark, light } from '../theme';
 import { PreDrugDataContent } from '../components';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { PreDrugInformation } from '../reducers/PreDrugInformation';
 
 const Container = styled.SafeAreaView`
   justify-content: flex-start;
@@ -16,11 +15,13 @@ const Container = styled.SafeAreaView`
   align-items: center;
   background-color: ${({ theme }) => theme.background};
   padding-left: 15px;
-  padding-right: 15px
+  padding-right: 15px;
 `;
 
 const Title = styled.Text`
   font-size: 30px;
+  position: absolute
+  top:-20px
   font-family: ${({ theme }) => theme.font_bold}
   color: ${({ theme }) => theme.title};
   padding-top: 0;
@@ -41,7 +42,7 @@ const Content = styled.Text`
   padding: 7px 0;
   padding-bottom: 30px;
   padding-top: 0
-  margin-top:0
+  margin-top:80px
 `;
 
 const DrugNow = ({ navigation }) => {
@@ -140,14 +141,14 @@ const DrugNow = ({ navigation }) => {
             .map(drugInfo => (
               <PreDrugDataContent
                 style={{
-                  height: setting.bigTextMode ? 85 : 70,
+                  height: settingInfos.bigTextMode ? 85 : 70,
                   backgroundColor:
-                    (setting.PregnantCaution
+                    (settingInfos.PregnantCaution
                       ? drugInfo.PregnantGrade
                       : false) ||
-                    (setting.ElderCaution ? drugInfo.ElderNote : false) ||
-                    (setting.ChildCaution ? drugInfo.ChildAge : false) ||
-                    (setting.CombCaution
+                    (settingInfos.ElderCaution ? drugInfo.ElderNote : false) ||
+                    (settingInfos.ChildCaution ? drugInfo.ChildAge : false) ||
+                    (settingInfos.CombCaution
                       ? CombList.filter(e =>
                           e ? e.indexOf(drugInfo.StdCode) !== -1 : false,
                         ).length > 1

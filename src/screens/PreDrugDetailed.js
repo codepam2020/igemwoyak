@@ -15,6 +15,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { dark, light } from '../theme';
 import secret from '../data/secret.json';
 import { ProgressContext } from '../contexts/Progress';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const width = Dimensions.get('window').width;
 
@@ -62,6 +63,8 @@ const ButtonText = styled.Text`
 `;
 
 function PreDrugDetailed({ route, navigation }) {
+  const [preDrugInformation, setPreDrugInformation] = useState({});
+  const [settingInfos, setSettingInfos] = useState({});
   const { spinner } = useContext(ProgressContext);
   const [url, setUrl] = useState('');
   const [showDUR, setShowDUR] = useState(false);
@@ -79,11 +82,27 @@ function PreDrugDetailed({ route, navigation }) {
     };
   });
 
+  const loadSettingInfos = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@testsettinginfo12321');
+      const settingInfo = JSON.parse(value);
+      if (value != null) {
+        setSettingInfos(settingInfo);
+      }
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+
+  useEffect(() => {
+    loadSettingInfos();
+  }, []);
+
   var CombListCaution =
     CombList.filter(e => (e ? e.indexOf(drugInfo.StdCode) !== -1 : false))
       .length > 1;
 
-  const theme = setting.darkmode ? dark : light;
+  const theme = settingInfos.darkmode ? dark : light;
 
   // Search drug image from seq code
   const SearchDrugImage = async seqcode => {
@@ -121,10 +140,10 @@ function PreDrugDetailed({ route, navigation }) {
 
   const styles = StyleSheet.create({
     text: {
-      fontSize: setting.bigTextMode ? 33 : 18,
+      fontSize: settingInfos.bigTextMode ? 33 : 18,
     },
     semiTitle: {
-      fontSize: setting.bigTextMode ? 38 : 23,
+      fontSize: settingInfos.bigTextMode ? 38 : 23,
     },
     icon: {
       color: theme.text,

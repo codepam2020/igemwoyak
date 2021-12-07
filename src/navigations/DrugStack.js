@@ -10,13 +10,13 @@ import {
   PreDrugModi,
 } from '../screens';
 import MainTab from './MainTab';
-import { ThemeConsumer } from 'styled-components/native';
+import { Dimensions } from 'react-native';
 import { dark, light } from '../theme';
-import { ThemeContext } from 'styled-components';
 import { Spinner } from '../components';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Stack = createStackNavigator();
+const width = Dimensions.get('window').width;
 
 const DrugStack = () => {
   const [settingInfos, setSettingInfos] = useState({});
@@ -53,7 +53,6 @@ const DrugStack = () => {
           headerShown: false,
         }}
       />
-
       <Stack.Screen
         name="PharmDetailed"
         component={PharmDetailed}
@@ -61,7 +60,10 @@ const DrugStack = () => {
           title: '약물 상세정보',
           headerTitleAlign: 'center',
           headerTitleStyle: {
+            justifyContent: 'center',
+            position: 'absolute',
             color: theme.title,
+            left: (width - 300) / 2,
             paddingTop: 0,
             marginTop: 0,
             fontSize: settingInfos.bigTextMode ? 38 : 28,
@@ -74,7 +76,6 @@ const DrugStack = () => {
           },
         }}
       />
-
       <Stack.Screen
         name="PreDrugDetailed"
         component={PreDrugDetailed}
@@ -83,7 +84,7 @@ const DrugStack = () => {
           headerTitleStyle: {
             justifyContent: 'center',
             position: 'absolute',
-            left: 10,
+            left: (width - 300) / 2,
             color: theme.title,
             paddingTop: 0,
             marginTop: 0,
@@ -97,14 +98,16 @@ const DrugStack = () => {
           },
         }}
       />
-
       <Stack.Screen
         name="DrugSearchByName"
         component={DrugSearchByName}
         options={{
           title: '약물명으로 찾기',
           headerTitleStyle: {
+            justifyContent: 'center',
+            position: 'absolute',
             color: theme.title,
+            left: (width - 300) / 2,
             paddingTop: 0,
             marginTop: 0,
             fontSize: settingInfos.bigTextMode ? 38 : 28,
@@ -123,7 +126,10 @@ const DrugStack = () => {
         options={{
           title: '직접 추가하기',
           headerTitleStyle: {
+            justifyContent: 'center',
+            position: 'absolute',
             color: theme.title,
+            left: (width - 300) / 2,
             paddingTop: 0,
             marginTop: 0,
             fontSize: settingInfos.bigTextMode ? 38 : 28,
@@ -136,15 +142,18 @@ const DrugStack = () => {
           },
         }}
       />
-
       <Stack.Screen
         name="AddDrugSetting"
         component={AddDrugSetting}
         options={{
           title: '복약 설정',
-          headerTitleAlign: 'center',
           headerTitleStyle: {
+            justifyContent: 'center',
+            position: 'absolute',
             color: theme.title,
+            left: (width - 300) / 2,
+            paddingTop: 0,
+            marginTop: 0,
             fontSize: settingInfos.bigTextMode ? 38 : 28,
             fontFamily: theme.font_bold,
           },
@@ -155,15 +164,18 @@ const DrugStack = () => {
           },
         }}
       />
-
       <Stack.Screen
         name="PreDrugModi"
         component={PreDrugModi}
         options={{
           title: '복약 설정',
-          headerTitleAlign: 'center',
           headerTitleStyle: {
+            justifyContent: 'center',
+            position: 'absolute',
             color: theme.title,
+            left: (width - 300) / 2,
+            paddingTop: 0,
+            marginTop: 0,
             fontSize: settingInfos.bigTextMode ? 38 : 28,
             fontFamily: theme.font_bold,
           },

@@ -38,7 +38,7 @@ const IconContainer = styled.TouchableOpacity`
   align-items: center;
   padding-top: 10px;
   padding-bottom: 10px
-  padding-right: 10px
+  padding-right: 4px
   padding-left: 10px
 `;
 
@@ -57,7 +57,7 @@ const Time = styled.Text`
   align-self: center;
   align-items: center;
   justify-content: center;
-  padding-top: 6px;
+  padding-top: 3px;
 `;
 
 const TimeContainer = styled.View`

@@ -8,7 +8,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Container = styled.View`
   flex-direction: row;
-  padding: 10px 0;
+  padding-top: 10px;
+  margin-top: 0px
   padding-left: 10px;
 `;
 
@@ -21,7 +22,6 @@ const SwitchContainer = styled.View`
 
 const Content = styled.Text`
   color: ${({ theme }) => theme.text};
-  font-size: 20px;
   font-family: ${({ theme }) => theme.font_medium}
   align-self: flex-start;
 `;
@@ -65,7 +65,7 @@ function DarkModeButton({ content, style }) {
   ///rendering start
   return (
     <Container style={style}>
-      <Content style={{ fontSize: settingInfos.bigTextMode ? 40 : 20 }}>
+      <Content style={{ fontSize: settingInfos.bigTextMode ? 33 : 18 }}>
         {content}
       </Content>
       <SwitchContainer>

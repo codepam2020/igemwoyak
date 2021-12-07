@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Dimensions, Switch, Button, TouchableOpacity } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import styled, { ThemeConsumer } from 'styled-components/native';
-import { useState } from 'react';
 import { Picker } from '@react-native-picker/picker';
 import { light, dark } from '../theme';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { AddPreDrugInfo, RemovePreDrugInfo } from '../actions/PreDrugAction';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 const width = Dimensions.get('window').width;
 
 const Container = styled.View`
