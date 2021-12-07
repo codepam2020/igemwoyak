@@ -21,6 +21,7 @@ const Container = styled.SafeAreaView`
 
 const Title = styled.Text`
   font-size: 30px;
+  top:-10px
   font-family: ${({ theme }) => theme.font_bold}
   color: ${({ theme }) => theme.title};
   padding-top: 0;

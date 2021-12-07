@@ -102,11 +102,11 @@ const DrugStack = () => {
         component={DrugSearchByName}
         options={{
           title: '약물명으로 찾기',
+          headerTitleAlign: 'center',
           headerTitleStyle: {
             justifyContent: 'center',
-            position: 'absolute',
+            bottom: 13,
             color: theme.title,
-            left: (width - 300) / 2,
             paddingTop: 0,
             marginTop: 0,
             fontSize: settingInfos.bigTextMode ? 38 : 28,
@@ -124,11 +124,11 @@ const DrugStack = () => {
         component={AddDrugByName}
         options={{
           title: '직접 추가하기',
+          headerTitleAlign: 'center',
           headerTitleStyle: {
             justifyContent: 'center',
-            position: 'absolute',
+            bottom: 13,
             color: theme.title,
-            left: (width - 300) / 2,
             paddingTop: 0,
             marginTop: 0,
             fontSize: settingInfos.bigTextMode ? 38 : 28,
@@ -146,11 +146,11 @@ const DrugStack = () => {
         component={AddDrugSetting}
         options={{
           title: '복약 설정',
+          headerTitleAlign: 'center',
           headerTitleStyle: {
             justifyContent: 'center',
-            position: 'absolute',
+            bottom: 13,
             color: theme.title,
-            left: (width - 300) / 2,
             paddingTop: 0,
             marginTop: 0,
             fontSize: settingInfos.bigTextMode ? 38 : 28,
@@ -168,11 +168,11 @@ const DrugStack = () => {
         component={PreDrugModi}
         options={{
           title: '복약 설정',
+          headerTitleAlign: 'center',
           headerTitleStyle: {
             justifyContent: 'center',
-            position: 'absolute',
+            bottom: 13,
             color: theme.title,
-            left: (width - 300) / 2,
             paddingTop: 0,
             marginTop: 0,
             fontSize: settingInfos.bigTextMode ? 38 : 28,
