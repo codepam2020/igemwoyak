@@ -6,6 +6,7 @@ import { DrugSearchButton } from '../components';
 import { dark, light } from '../theme';
 import { PreDrugDataContent } from '../components';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { RemoveDrugInfo, RemovePreDrugInfo } from '../actions';
 
 const Container = styled.SafeAreaView`
   justify-content: flex-start;
@@ -48,7 +49,6 @@ const Content = styled.Text`
 const DrugNow = ({ navigation }) => {
   const [preDrugInformation, setPreDrugInformation] = useState({});
   const [settingInfos, setSettingInfos] = useState({});
-  const [variation, setVariation] = useState(1);
 
   const { preDrugInfos, setting } = useSelector(state => {
     return {
@@ -56,7 +56,7 @@ const DrugNow = ({ navigation }) => {
       setting: state.settingInfo,
     };
   });
-
+  const dispatch = useDispatch();
   const loadSettingInfos = async () => {
     try {
       const value = await AsyncStorage.getItem('@testsettinginfo12321');
@@ -99,7 +99,7 @@ const DrugNow = ({ navigation }) => {
   useEffect(() => {
     load();
     loadSettingInfos();
-  }, [preDrugInfos, variation, setting]);
+  }, [preDrugInfos, setting]);
 
   function _removePress(id) {
     console.log('Press remove button');
@@ -116,8 +116,8 @@ const DrugNow = ({ navigation }) => {
           onPress: () => {
             const currentDrugInfos = Object.assign({}, preDrugInformation);
             delete currentDrugInfos[id];
+            dispatch(RemovePreDrugInfo(id));
             dispatchPreDrugInfo(currentDrugInfos);
-            setVariation(prev => prev + 1);
           },
         },
       ],

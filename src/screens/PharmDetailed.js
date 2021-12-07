@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import {
   Image,
   Dimensions,
@@ -15,6 +15,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { dark, light } from '../theme';
 import secret from '../data/secret.json';
 import { ProgressContext } from '../contexts/Progress';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const width = Dimensions.get('window').width;
 
@@ -62,8 +63,8 @@ const ButtonText = styled.Text`
 `;
 
 function Pharmdetaild({ route, navigation }) {
-  const theme = darkmode ? dark : light;
   const { spinner } = useContext(ProgressContext);
+  const [settingInfos, setSettingInfos] = useState({});
   const [url, setUrl] = useState('');
   const [showDUR, setShowDUR] = useState(false);
   const [showCaution, setShowCaution] = useState(false);
@@ -74,12 +75,27 @@ function Pharmdetaild({ route, navigation }) {
   const [showMethod, setShowMethod] = useState(false);
   const { drugInfo, CombList } = route.params;
 
-  const { bigTextMode, darkmode } = useSelector(state => {
+  const { setting } = useSelector(state => {
     return {
-      bigTextMode: state.settingInfo.bigTextMode,
-      darkmode: state.settingInfo.darkmode,
+      setting: state.settingInfo,
     };
   });
+
+  const loadSettingInfos = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@testsettinginfo12321');
+      const settingInfo = JSON.parse(value);
+      if (value != null) {
+        setSettingInfos(settingInfo);
+      }
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+
+  useEffect(() => {
+    loadSettingInfos();
+  }, []);
 
   var CombListCaution =
     CombList.filter(e => (e ? e.indexOf(drugInfo.StdCode) !== -1 : false))
@@ -118,12 +134,14 @@ function Pharmdetaild({ route, navigation }) {
       : null;
   }, []);
 
+  const theme = settingInfos.darkmode ? dark : light;
+
   const styles = StyleSheet.create({
     text: {
-      fontSize: bigTextMode ? 33 : 18,
+      fontSize: settingInfos.bigTextMode ? 33 : 18,
     },
     semiTitle: {
-      fontSize: bigTextMode ? 38 : 23,
+      fontSize: settingInfos.bigTextMode ? 38 : 23,
     },
     icon: {
       color: theme.text,

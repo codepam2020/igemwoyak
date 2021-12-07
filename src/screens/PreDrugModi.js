@@ -107,9 +107,7 @@ function PreDrugModi({ route, navigation }) {
 
   const theme = settingInfos.darkmode ? dark : light;
   const dispatch = useDispatch();
-  const [preDrugDays, setPreDrugDays] = useState(
-    drugInfo.PreDrugDays ? drugInfo.PreDrugDays : '7일',
-  );
+  const [preDrugDays, setPreDrugDays] = useState(drugInfo.PreDrugDays);
 
   /// 숫자 리스트 형태
   var num = [];

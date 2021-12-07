@@ -137,36 +137,37 @@ function AddDrugSetting({ route, navigation }) {
     const currentTime = selectedTime || morningTime;
     setMorningTimeShow(Platform.OS === 'ios');
     setMorningTime(prev => currentTime);
-    data.MorningTime = currentTime.toString();
-    data.MorningAlarm = morningAlarm;
   }
 
   function lunchTimeOnChange(event, selectedTime) {
     const currentTime = selectedTime || lunchTime;
     setLunchTimeShow(Platform.OS === 'ios');
     setLunchTime(prev => currentTime);
-    data.LunchTime = currentTime.toString();
-    data.LunchAlarm = lunchAlarm;
   }
 
   function dinnerTimeOnChange(event, selectedTime) {
     const currentTime = selectedTime || dinnerTime;
     setDinnerTimeShow(Platform.OS === 'ios');
     setDinnerTime(prev => currentTime);
-    data.DinnerTime = currentTime.toString();
-    data.DinnerAlarm = dinnerAlarm;
   }
 
   function nightTimeOnChange(event, selectedTime) {
     const currentTime = selectedTime || nightTime;
     setNightTimeShow(Platform.OS === 'ios');
     setNightTime(prev => currentTime);
-    data.NightTime = currentTime.toString();
-    data.NightAlarm = nightAlarm;
   }
 
   //push save button
   function PushSaveButton() {
+    data.MorningTime = morningTime.toString();
+    data.MorningAlarm = morningAlarm;
+    data.LunchTime = lunchTime.toString();
+    data.LunchAlarm = lunchAlarm;
+    data.DinnerTime = dinnerTime.toString();
+    data.DinnerAlarm = dinnerAlarm;
+    data.NightTime = nightTime.toString();
+    data.NightAlarm = nightAlarm;
+    data.PreDrugDays = preDrugDays;
     dispatch(AddPreDrugInfo(data));
     const n_data = { [data.id]: data };
     dispatchPreDrugInfo({ ...preDrugInformation, ...n_data });

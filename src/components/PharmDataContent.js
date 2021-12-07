@@ -66,7 +66,7 @@ const TimeContainer = styled.View`
   justify-content: center;
 `;
 
-const PharmDataContent = ({ drugInfo, namePress, style }) => {
+const PharmDataContent = ({ drugInfo, namePress, style, removePress }) => {
   const dispatch = useDispatch();
   const { id, name } = drugInfo;
   const { year, month, week, date, time } = DateConvert(drugInfo.time);
@@ -103,27 +103,6 @@ const PharmDataContent = ({ drugInfo, namePress, style }) => {
     } else {
       return data;
     }
-  }
-
-  // remove press function
-  function removePress() {
-    console.log('Press remove button');
-    Alert.alert(
-      '정말 삭제하시겠습니까?',
-      '삭제시 복구 불가능하니 신중히 선택바랍니다.',
-      [
-        {
-          text: '아니요',
-          onPress: () => {},
-        },
-        {
-          text: '네',
-          onPress: () => {
-            dispatch(RemoveDrugInfo(id));
-          },
-        },
-      ],
-    );
   }
 
   // long press function

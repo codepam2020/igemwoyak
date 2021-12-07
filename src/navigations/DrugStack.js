@@ -58,12 +58,11 @@ const DrugStack = () => {
         component={PharmDetailed}
         options={{
           title: '약물 상세정보',
-          headerTitleAlign: 'center',
           headerTitleStyle: {
             justifyContent: 'center',
             position: 'absolute',
-            color: theme.title,
             left: (width - 300) / 2,
+            color: theme.title,
             paddingTop: 0,
             marginTop: 0,
             fontSize: settingInfos.bigTextMode ? 38 : 28,

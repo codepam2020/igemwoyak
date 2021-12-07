@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import { Alert } from 'react-native';
 import styled from 'styled-components/native';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { RemoveDrugInfo } from '../actions';
 import PharmDataContent from '../components/PharmDataContent';
 import { dark, light } from '../theme';
 import DrugSearchButton from '../components/DrugSearchButton';
@@ -54,6 +56,7 @@ function TakingPharmData({ navigation }) {
       setting: state.settingInfo,
     };
   });
+  const dispatch = useDispatch();
 
   const load = async () => {
     try {
@@ -80,10 +83,33 @@ function TakingPharmData({ navigation }) {
     }
   };
 
+  async function loadDrugInfo() {
+    try {
+      const value = await AsyncStorage.getItem('@test2349873');
+      const info = JSON.parse(value);
+      if (value != null) {
+        setDrugInformation(info);
+      }
+    } catch (e) {
+      console.log(e.message);
+    }
+  }
+
+  async function dispatchDrugInfo(data) {
+    try {
+      await AsyncStorage.setItem('@test2349873', JSON.stringify(data));
+    } catch (e) {
+      console.log(e.message);
+    }
+  }
+
   useEffect(() => {
     load();
     loadSettingInfos();
-  }, [preDrugInformation, drugInfos]);
+    loadDrugInfo();
+  }, [drugInfos, preDrugInfos, setting]);
+
+  console.log(drugInformation);
 
   const theme = settingInfos.darkmode ? dark : light;
 
@@ -93,7 +119,28 @@ function TakingPharmData({ navigation }) {
     CombList.push(Object.values(preDrugInformation)[i].CombTarget);
   }
 
-  console.log(CombList);
+  function removePress(id) {
+    console.log('Press remove button');
+    Alert.alert(
+      '정말 삭제하시겠습니까?',
+      '삭제시 복구 불가능하니 신중히 선택바랍니다.',
+      [
+        {
+          text: '아니요',
+          onPress: () => {},
+        },
+        {
+          text: '네',
+          onPress: () => {
+            const currentDrugInfos = Object.assign({}, drugInformation);
+            delete currentDrugInfos[id];
+            dispatch(RemoveDrugInfo(id));
+            dispatchDrugInfo(currentDrugInfos);
+          },
+        },
+      ],
+    );
+  }
 
   return (
     <Container>
@@ -104,8 +151,8 @@ function TakingPharmData({ navigation }) {
         빨간색으로 표시되는 약물은 복용시 주의가 필요한 약물입니다.
       </Content>
       <List>
-        {drugInfos &&
-          drugInfos
+        {Object.values(drugInformation) &&
+          Object.values(drugInformation)
             .sort((a, b) => parseFloat(b.id) - parseFloat(a.id))
             .map(drugInfo => (
               <PharmDataContent
@@ -123,7 +170,7 @@ function TakingPharmData({ navigation }) {
                         ).length > 0
                       : false)
                       ? theme.caution
-                      : setting.darkmode
+                      : settingInfos.darkmode
                       ? 'gray'
                       : 'lightgray',
                 }}
@@ -133,6 +180,7 @@ function TakingPharmData({ navigation }) {
                 namePress={() =>
                   navigation.navigate('PharmDetailed', { drugInfo, CombList })
                 }
+                removePress={() => removePress(drugInfo.id)}
               />
             ))}
       </List>

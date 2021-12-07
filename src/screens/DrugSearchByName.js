@@ -76,6 +76,8 @@ const SearchButtonTouch = styled.TouchableOpacity`
 
 function DrugSearchByName({ navigation }) {
   const { spinner } = useContext(ProgressContext);
+  const [settingInfos, setSettingInfos] = useState({});
+  const [drugInformation, setDrugInformation] = useState({});
   const [text, setText] = useState('');
   const [drugNames, setDrugNames] = useState([]);
   const { setting } = useSelector(state => {
@@ -86,8 +88,35 @@ function DrugSearchByName({ navigation }) {
   const dispatch = useDispatch();
 
   async function loadDrugInfo() {
-    const loadedDrugInfo = await AsyncStorage.getItem('@test2349873');
-    setDrug;
+    try {
+      const value = await AsyncStorage.getItem('@test2349873');
+      const info = JSON.parse(value);
+      if (value != null) {
+        setDrugInformation(info);
+      }
+    } catch (e) {
+      console.log(e.message);
+    }
+  }
+
+  const loadSettingInfos = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@testsettinginfo12321');
+      const settingInfo = JSON.parse(value);
+      if (value != null) {
+        setSettingInfos(settingInfo);
+      }
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+
+  async function dispatchDrugInfo(data) {
+    try {
+      await AsyncStorage.setItem('@test2349873', JSON.stringify(data));
+    } catch (e) {
+      console.log(e.message);
+    }
   }
 
   function timestamp() {
@@ -95,6 +124,11 @@ function DrugSearchByName({ navigation }) {
     Now.setHours(Now.getHours() + 9);
     return Now.toISOString().replace('T', ' ').substring(0, 19);
   }
+
+  useEffect(() => {
+    loadDrugInfo();
+    loadSettingInfos();
+  }, []);
 
   // seq코드를 바코드로 변경
   const SeqToBarCode = async data => {
@@ -218,6 +252,8 @@ function DrugSearchByName({ navigation }) {
           data.DuplicationCount = json.DuplicationCount;
 
           dispatch(AddDrugInfo(data));
+          const n_data = { [data.id]: data };
+          dispatchDrugInfo({ ...drugInformation, ...n_data });
           spinner.stop();
         });
     } catch (e) {
@@ -229,7 +265,7 @@ function DrugSearchByName({ navigation }) {
   // 약물 이름 길이 수정 함수
   function PharmNameset(data) {
     if (width < 600) {
-      if (bigTextMode == true) {
+      if (settingInfos.bigTextMode == true) {
         if (data.length >= 10) {
           return `${data.substring(0, 10)}..`;
         } else {
@@ -300,19 +336,26 @@ function DrugSearchByName({ navigation }) {
         {drugNames ? (
           drugNames.map(info => (
             <ContentBox
-              style={{ height: bigTextMode ? 70 : 60 }}
+              style={{ height: settingInfos.bigTextMode ? 68 : 58 }}
               key={info.ITEM_SEQ}
               onPress={() => {
                 PressDrugName(info);
               }}
             >
-              <ContentText style={{ fontSize: bigTextMode ? 35 : 20 }}>
+              <ContentText
+                style={{ fontSize: settingInfos.bigTextMode ? 33 : 18 }}
+              >
                 {PharmNameset(EditPharmName(info.ITEM_NAME))}
               </ContentText>
             </ContentBox>
           ))
         ) : (
-          <Text style={{ color: 'red', fontSize: bigTextMode ? 30 : 20 }}>
+          <Text
+            style={{
+              color: 'red',
+              fontSize: settingInfos.bigTextMode ? 33 : 18,
+            }}
+          >
             올바른 약물명을 입력하세요
           </Text>
         )}

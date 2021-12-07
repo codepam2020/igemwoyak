@@ -64,6 +64,7 @@ const ButtonText = styled.Text`
 
 function PreDrugDetailed({ route, navigation }) {
   const [preDrugInformation, setPreDrugInformation] = useState({});
+  const [drugInformation, setDrugInformation] = useState({});
   const [settingInfos, setSettingInfos] = useState({});
   const { spinner } = useContext(ProgressContext);
   const [url, setUrl] = useState('');
@@ -94,9 +95,29 @@ function PreDrugDetailed({ route, navigation }) {
     }
   };
 
+  async function dispatchDrugInfo(data) {
+    try {
+      await AsyncStorage.setItem('@test2349873', JSON.stringify(data));
+    } catch (e) {
+      console.log(e.message);
+    }
+  }
+
+  async function loadDrugInfo() {
+    try {
+      const value = await AsyncStorage.getItem('@test2349873');
+      const info = JSON.parse(value);
+      if (value != null) {
+        setDrugInformation(info);
+      }
+    } catch (e) {
+      console.log(e.message);
+    }
+  }
+
   useEffect(() => {
     loadSettingInfos();
-    console.log(drugInfo.MorningT);
+    loadDrugInfo();
   }, []);
 
   var CombListCaution =
@@ -162,6 +183,8 @@ function PreDrugDetailed({ route, navigation }) {
     drugInfo.id = Date.now().toString();
     drugInfo.time = Date().toString();
     dispatch(AddDrugInfo(drugInfo));
+    const n_data = { [drugInfo.id]: drugInfo };
+    dispatchDrugInfo({ ...drugInformation, ...n_data });
   }
 
   return (
