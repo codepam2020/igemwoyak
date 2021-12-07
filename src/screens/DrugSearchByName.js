@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { ProgressContext } from '../contexts/Progress';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components/native';
@@ -6,6 +6,7 @@ import { Alert, Dimensions, Text } from 'react-native';
 import secret from '../data/secret.json';
 import { EditPharmName, EditPharmData } from '../utils';
 import { AddDrugInfo } from '../actions';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const width = Dimensions.get('window').width;
 
@@ -77,13 +78,17 @@ function DrugSearchByName({ navigation }) {
   const { spinner } = useContext(ProgressContext);
   const [text, setText] = useState('');
   const [drugNames, setDrugNames] = useState([]);
-  const { bigTextMode, darkmode } = useSelector(state => {
+  const { setting } = useSelector(state => {
     return {
-      bigTextMode: state.settingInfo.bigTextMode,
-      darkmode: state.settingInfo.darkmode,
+      setting: state.settingInfo,
     };
   });
   const dispatch = useDispatch();
+
+  async function loadDrugInfo() {
+    const loadedDrugInfo = await AsyncStorage.getItem('@test2349873');
+    setDrug;
+  }
 
   function timestamp() {
     var Now = new Date();

@@ -96,6 +96,7 @@ function PreDrugDetailed({ route, navigation }) {
 
   useEffect(() => {
     loadSettingInfos();
+    console.log(drugInfo.MorningT);
   }, []);
 
   var CombListCaution =

@@ -56,6 +56,8 @@ const ButtonText = styled.Text`
 `;
 
 function PreDrugModi({ route, navigation }) {
+  const [settingInfos, setSettingInfos] = useState({});
+  const [preDrugInformation, setPreDrugInformation] = useState({});
   const { drugInfo } = route.params;
 
   const { bigTextMode, darkmode } = useSelector(state => {
@@ -65,13 +67,49 @@ function PreDrugModi({ route, navigation }) {
     };
   });
 
-  const theme = darkmode ? dark : light;
+  const load = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@test1849923');
+      const predruginformation = JSON.parse(value);
+
+      if (value != null) {
+        setPreDrugInformation(predruginformation);
+      }
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+
+  const loadSettingInfos = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@testsettinginfo12321');
+      const settingInfo = JSON.parse(value);
+      if (value != null) {
+        setSettingInfos(settingInfo);
+      }
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+
+  const dispatchPreDrugInfo = async data => {
+    try {
+      await AsyncStorage.setItem('@test1849923', JSON.stringify(data));
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  useEffect(() => {
+    load();
+    loadSettingInfos();
+  }, []);
+
+  const theme = settingInfos.darkmode ? dark : light;
   const dispatch = useDispatch();
   const [preDrugDays, setPreDrugDays] = useState(
     drugInfo.PreDrugDays ? drugInfo.PreDrugDays : '7일',
   );
-
-  console.log(drugInfo.preDrugDays ? 'true' : 'false');
 
   /// 숫자 리스트 형태
   var num = [];
@@ -136,6 +174,20 @@ function PreDrugModi({ route, navigation }) {
   function PushSaveButton() {
     dispatch(RemovePreDrugInfo(drugInfo.id));
     dispatch(AddPreDrugInfo(drugInfo));
+
+    preDrugInformation[drugInfo.id].PreDrugDays = preDrugDays;
+    preDrugInformation[drugInfo.id].MorningAlarm = morningAlarm;
+    preDrugInformation[drugInfo.id].LunchAlarm = lunchAlarm;
+    preDrugInformation[drugInfo.id].DinnerAlarm = dinnerAlarm;
+    preDrugInformation[drugInfo.id].NightAlarm = nightAlarm;
+
+    preDrugInformation[drugInfo.id].MorningTime = morningTime;
+    preDrugInformation[drugInfo.id].LunchTime = lunchTime;
+    preDrugInformation[drugInfo.id].DinnerTime = dinnerTime;
+    preDrugInformation[drugInfo.id].NightTime = nightTime;
+
+    dispatchPreDrugInfo(preDrugInformation);
+
     navigation.navigate('MainTab');
   }
 

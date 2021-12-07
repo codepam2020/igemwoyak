@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/native';
 import { useSelector } from 'react-redux';
 import PharmDataContent from '../components/PharmDataContent';
 import { dark, light } from '../theme';
 import DrugSearchButton from '../components/DrugSearchButton';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Container = styled.SafeAreaView`
   justify-content: flex-start;
@@ -43,6 +44,9 @@ const Content = styled.Text`
 
 // function start
 function TakingPharmData({ navigation }) {
+  const [settingInfos, setSettingInfos] = useState({});
+  const [preDrugInformation, setPreDrugInformation] = useState({});
+  const [drugInformation, setDrugInformation] = useState({});
   const { drugInfos, preDrugInfos, setting } = useSelector(state => {
     return {
       drugInfos: state.drugInfo,
@@ -51,17 +55,49 @@ function TakingPharmData({ navigation }) {
     };
   });
 
-  const theme = setting.darkmode ? dark : light;
+  const load = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@test1849923');
+      const predruginformation = JSON.parse(value);
+
+      if (value != null) {
+        setPreDrugInformation(predruginformation);
+      }
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+
+  const loadSettingInfos = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@testsettinginfo12321');
+      const settingInfo = JSON.parse(value);
+      if (value != null) {
+        setSettingInfos(settingInfo);
+      }
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+
+  useEffect(() => {
+    load();
+    loadSettingInfos();
+  }, [preDrugInformation, drugInfos]);
+
+  const theme = settingInfos.darkmode ? dark : light;
 
   var CombList = [];
 
-  for (i = 0; i < preDrugInfos.length; i++) {
-    CombList.push(preDrugInfos[i].CombTarget);
+  for (i = 0; i < Object.values(preDrugInformation).length; i++) {
+    CombList.push(Object.values(preDrugInformation)[i].CombTarget);
   }
+
+  console.log(CombList);
 
   return (
     <Container>
-      <Title style={{ fontSize: setting.bigTextMode ? 40 : 30 }}>
+      <Title style={{ fontSize: settingInfos.bigTextMode ? 40 : 30 }}>
         복약 내역
       </Title>
       <Content style={{ color: theme.caution, paddingBottom: 10 }}>
@@ -76,12 +112,12 @@ function TakingPharmData({ navigation }) {
                 style={{
                   height: setting.bigTextMode ? 85 : 70,
                   backgroundColor:
-                    (setting.PregnantCaution
+                    (settingInfos.PregnantCaution
                       ? drugInfo.PregnantGrade
                       : false) ||
-                    (setting.ElderCaution ? drugInfo.ElderNote : false) ||
-                    (setting.ChildCaution ? drugInfo.ChildAge : false) ||
-                    (setting.CombCaution
+                    (settingInfos.ElderCaution ? drugInfo.ElderNote : false) ||
+                    (settingInfos.ChildCaution ? drugInfo.ChildAge : false) ||
+                    (settingInfos.CombCaution
                       ? CombList.filter(e =>
                           e ? e.indexOf(drugInfo.StdCode) !== -1 : false,
                         ).length > 0

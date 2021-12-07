@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components/native';
-import { Switch } from 'react-native';
+import { Switch, Dimensions } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { dark, light } from '../theme';
 import { PregnantCautionAction } from '../actions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const width = Dimensions.get('window').width;
 
 const Container = styled.View`
   flex-direction: row;
@@ -22,6 +24,7 @@ const SwitchContainer = styled.View`
 const Content = styled.Text`
   color: ${({ theme }) => theme.text};
   font-family: ${({ theme }) => theme.font_medium}
+  width: ${width - 110}px
   font-size: 20px;
   align-self: flex-start;
 `;
@@ -70,7 +73,7 @@ function PregnantCautionButton({ content, style }) {
   ///rendering start
   return (
     <Container style={style}>
-      <Content style={{ fontSize: settingInfos.bigTextMode ? 40 : 20 }}>
+      <Content style={{ fontSize: settingInfos.bigTextMode ? 33 : 18 }}>
         {content}
       </Content>
       <SwitchContainer>

@@ -66,7 +66,7 @@ function ElderCautionButton({ content, style }) {
   ///rendering start
   return (
     <Container style={style}>
-      <Content style={{ fontSize: settingInfos.bigTextMode ? 40 : 20 }}>
+      <Content style={{ fontSize: settingInfos.bigTextMode ? 33 : 18 }}>
         {content}
       </Content>
       <SwitchContainer>

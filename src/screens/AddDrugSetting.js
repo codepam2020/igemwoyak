@@ -58,33 +58,45 @@ const ButtonText = styled.Text`
 
 function AddDrugSetting({ route, navigation }) {
   const [preDrugDays, setPreDrugDays] = useState('7일');
+  const [preDrugInformation, setPreDrugInformation] = useState({});
+  const [settingInfos, setSettingInfos] = useState({});
 
-  const { bigTextMode, darkmode } = useSelector(state => {
+  const { setting } = useSelector(state => {
     return {
-      bigTextMode: state.settingInfo.bigTextMode,
-      darkmode: state.settingInfo.darkmode,
+      setting: state.settingInfo,
     };
   });
 
   const { data } = route.params;
-  const theme = darkmode ? dark : light;
+  const theme = settingInfos.darkmode ? dark : light;
   const dispatch = useDispatch();
-
-  const [preDrugInfos, setPreDrugInfos] = useState({});
 
   // 로컬 데이터 불러오기
   const loadPreDrugInfo = async () => {
-    const loadedData = await AsyncStorage.getItem('@test12321');
-    setPreDrugInfos(JSON.parse(loadedData || '{}'));
+    const loadedData = await AsyncStorage.getItem('@test1849923');
+    setPreDrugInformation(JSON.parse(loadedData || '{}'));
+  };
+
+  const loadSettingInfos = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@testsettinginfo12321');
+      const settingInfo = JSON.parse(value);
+      if (value != null) {
+        setSettingInfos(settingInfo);
+      }
+    } catch (e) {
+      console.log(e.message);
+    }
   };
 
   useEffect(() => {
     loadPreDrugInfo();
+    loadSettingInfos();
   }, []);
 
   const dispatchPreDrugInfo = async data => {
     try {
-      await AsyncStorage.setItem('@test12321', JSON.stringify(data));
+      await AsyncStorage.setItem('@test1849923', JSON.stringify(data));
     } catch (e) {
       console.log(e);
     }
@@ -103,13 +115,21 @@ function AddDrugSetting({ route, navigation }) {
   const [nightAlarm, setNightAlarm] = useState(false);
 
   // 알람 설정창 show 여부
-  const [morningTime, setMorningTime] = useState(new Date());
+  const [morningTime, setMorningTime] = useState(
+    new Date('1970-01-01T00:00:00.000Z'),
+  );
   const [morningTimeShow, setMorningTimeShow] = useState(false);
-  const [lunchTime, setLunchTime] = useState(new Date());
+  const [lunchTime, setLunchTime] = useState(
+    new Date('1970-01-01T04:00:00.000Z'),
+  );
   const [lunchtimeShow, setLunchTimeShow] = useState(false);
-  const [dinnerTime, setDinnerTime] = useState(new Date());
+  const [dinnerTime, setDinnerTime] = useState(
+    new Date('1970-01-01T09:00:00.000Z'),
+  );
   const [dinnertimeShow, setDinnerTimeShow] = useState(false);
-  const [nightTime, setNightTime] = useState(new Date());
+  const [nightTime, setNightTime] = useState(
+    new Date('1970-01-01T14:00:00.000Z'),
+  );
   const [nighttimeShow, setNightTimeShow] = useState(false);
 
   // 시간 변경시 함수
@@ -149,7 +169,7 @@ function AddDrugSetting({ route, navigation }) {
   function PushSaveButton() {
     dispatch(AddPreDrugInfo(data));
     const n_data = { [data.id]: data };
-    dispatchPreDrugInfo({ ...preDrugInfos, ...n_data });
+    dispatchPreDrugInfo({ ...preDrugInformation, ...n_data });
     navigation.navigate('MainTab');
   }
 
@@ -190,7 +210,7 @@ function AddDrugSetting({ route, navigation }) {
         </SemiContainer>
         <SemiContainer
           style={{
-            borderTopColor: darkmode ? 'gray' : 'lightgray',
+            borderTopColor: settingInfos.darkmode ? 'gray' : 'lightgray',
             borderTopWidth: 1,
             marginTop: 25,
             paddingTop: 25,
@@ -376,7 +396,7 @@ function AddDrugSetting({ route, navigation }) {
         </SemiContainer>
         <SemiContainer
           style={{
-            borderTopColor: darkmode ? 'gray' : 'lightgray',
+            borderTopColor: settingInfos.darkmode ? 'gray' : 'lightgray',
             borderTopWidth: 1,
             marginTop: 25,
             paddingTop: 30,

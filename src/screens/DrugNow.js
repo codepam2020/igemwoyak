@@ -71,7 +71,7 @@ const DrugNow = ({ navigation }) => {
 
   const load = async () => {
     try {
-      const value = await AsyncStorage.getItem('@test12321');
+      const value = await AsyncStorage.getItem('@test1849923');
       const predruginformation = JSON.parse(value);
 
       if (value != null) {
@@ -90,7 +90,7 @@ const DrugNow = ({ navigation }) => {
 
   const dispatchPreDrugInfo = async data => {
     try {
-      await AsyncStorage.setItem('@test12321', JSON.stringify(data));
+      await AsyncStorage.setItem('@test1849923', JSON.stringify(data));
     } catch (e) {
       console.log(e);
     }
