@@ -1,5 +1,4 @@
-<img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/codepam2020/igemwoyak">
-<img alt="GitHub top language" src="https://img.shields.io/github/languages/top/codepam2020/igemwoyak">
+<img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/codepam2020/igemwoyak"> <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/codepam2020/igemwoyak">
 
 # Product Name
 
