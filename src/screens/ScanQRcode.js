@@ -10,6 +10,7 @@ import { AddDrugInfo, AddPreDrugInfo } from '../actions';
 import OverlayView from '../components/OverlayView';
 import { EditPharmData, EditPharmName } from '../utils';
 import secret from '../data/secret.json';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Container = styled.SafeAreaView`
   flex: 1;
@@ -26,6 +27,8 @@ function timestamp() {
 
 ///function Starts
 function ScanQRcode({ navigation }) {
+  const [preDrugInformation, setPreDrugInformation] = useState({});
+  const [drugInformation, setDrugInformation] = useState({});
   const { spinner } = useContext(ProgressContext);
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
@@ -37,6 +40,26 @@ function ScanQRcode({ navigation }) {
       vibration: state.settingInfo.vibration,
     };
   });
+
+  async function loadDrugInfo() {
+    try {
+      const value = await AsyncStorage.getItem('@test2349873');
+      const info = JSON.parse(value);
+      if (value != null) {
+        setDrugInformation(info);
+      }
+    } catch (e) {
+      console.log(e.message);
+    }
+  }
+
+  async function dispatchDrugInfo(data) {
+    try {
+      await AsyncStorage.setItem('@test2349873', JSON.stringify(data));
+    } catch (e) {
+      console.log(e.message);
+    }
+  }
 
   useEffect(() => {
     (async () => {
